@@ -1,0 +1,9 @@
+<nav class="navbar navbar-light bg-faded">
+  <div class="nav navbar-nav">
+    <%= link_to 'Home',root_path, class:"nav-item nav-link" %>
+  <% if current_user %>
+    <%= link_to 'Profile', profile_path, class:"nav-item nav-link" %>
+    <%= link_to 'Logout', logout_path, method: :delete, class:"nav-item nav-link pull-xs-right" %>
+  <% end %>
+  </div>
+</nav>

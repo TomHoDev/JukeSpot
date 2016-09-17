@@ -1,1 +1,99 @@
-<%= @party.name %>
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <h2><%= @party.name %></h2>
+    <% if @party.spotify_playlist_id %>
+
+    <% else %>
+      <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+        Import Playlist
+      </button>
+      <%= link_to 'Create A New Spotify Playlist', "/parties/#{@party.id}/new_playlist", class:"btn btn-success btn-lg", role:"button", method:'patch' %>
+      <% end %>
+  </div>
+  <% if @party.spotify_playlist_id && @party.juke_tracks.empty? %>
+    <div class="row">
+      <div class="alert alert-success col-md-6 offset-md-3" role="alert">
+        <strong>Well done!</strong> Check your playlists on Spotify!
+      </div>
+    </div>
+  <% end %>
+  <!-- Tracks -->
+  <div class="row">
+    <!-- staged -->
+    <div class="col-xs-6">
+      <h2>Staged</h2>
+      <ul class="list-group">
+      <% if @party.staged_tracks %>
+        <% @party.staged_tracks.each do |staged_track|  %>
+          <li class="list-group-item list-group-item-action">
+            <%= staged_track.track.name %> : <font color=blue><%= staged_track.points %></font>
+            <span class='pull-xs-right'>
+
+            <%= link_to "/juke_tracks/#{staged_track.id}/vote_up", class:"btn btn-success", role:"button" do %>
+                <span class="octicon octicon-arrow-up"></span>
+              <% end %>
+
+             <%= link_to "/juke_tracks/#{staged_track.id}/vote_down", class:"btn btn-danger", role:"button" do %>
+              <span class="octicon octicon-arrow-down"></span>
+            <% end %>
+
+            </span>
+          </li>
+        <% end %>
+      <% end %>
+      </ul>
+    </div>
+
+    <!-- active -->
+    <div class="col-xs-6">
+      <h2>Active</h2>
+      <ul class="list-group">
+      <% if @party.active_tracks %>
+        <% @party.active_tracks.each do |active_track|  %>
+          <li class="list-group-item list-group-item-action">
+            <%= active_track.track.name %> : <font color=blue><%= active_track.points %></font>
+            <span class='pull-xs-right'>
+
+            <%= link_to "/juke_tracks/#{active_track.id}/vote_up", class:"btn btn-success", role:"button" do %>
+                <span class="octicon octicon-arrow-up"></span>
+              <% end %>
+
+             <%= link_to "/juke_tracks/#{active_track.id}/vote_down", class:"btn btn-danger", role:"button" do %>
+              <span class="octicon octicon-arrow-down"></span>
+            <% end %>
+
+            </span>
+          </li>
+        <% end %>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- Import playlist Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Your Playlists</h4>
+      </div>
+      <div class="modal-body">
+      <% if spotify_user.playlists %>
+        <ul class="list-group">
+          <% spotify_user.playlists.each do |playlist| %>
+            <%= button_to playlist.name, {action: "import", party_id: @party.id },
+                                          method: :patch,
+                                          params: { playlist_id: playlist.id, owner_id: playlist.owner.id },
+                                          class:"list-group-item list-group-item-action" %></li>
+          <% end %>
+        </ul>
+      <% end %>
+      </div>
+  </div>
+</div>
+<%= console %>

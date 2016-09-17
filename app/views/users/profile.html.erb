@@ -1,6 +1,13 @@
-hello <%= spotify_user.email %>
-<br>
-<%= link_to 'Start a Party', '/parties/new' %>
-
-<h2>My Parties</h2>
-<%= console %>
+<div class="row center">
+  <div class="col-md-8 offset-md-2">
+  <%= link_to 'Start a Party', '/parties/new', class:"btn btn-success btn-lg btn-block" %>
+  <h2 class="center-text">My Parties</h2>
+  <% if current_user.parties %>
+    <ul class="list-group">
+      <% current_user.parties.each do |party| %>
+        <%= link_to party.name, party_path(party), class:"list-group-item list-group-item-action" %>
+      <% end %>
+    </ul>
+  <% end %>
+  </div>
+</div>

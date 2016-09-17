@@ -1,7 +1,7 @@
 <%= form_for :party, url: parties_path do |f| %>
   <p>
     <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, required: true %>
   </p>
   <p>
     <%= f.label :threshold %><br>
